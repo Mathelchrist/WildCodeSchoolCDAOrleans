@@ -14,6 +14,7 @@ public class Cat extends Animal{
         this.nbPaws = nbPaws;
     }
 
+    // NRO 2021-09-27 : non, pour le moins il faut lever une exception
     @Override
     void lay() {
 

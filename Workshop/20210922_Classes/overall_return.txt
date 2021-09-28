@@ -1,0 +1,4 @@
+// NRO 2021-09-27 : la fonctionnalité avoir des pattes aurait pu être mise en comment
+//  entre plusieurs classes
+// Attention à la foncionnalité lay qui devrait au moins lever une exception
+// si elle est appelée sur un animal qui ne pond pas

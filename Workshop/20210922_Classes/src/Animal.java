@@ -29,6 +29,7 @@ abstract class Animal {
         return toMove;
     }
 
+    // NRO 2021-09-27 : A éviter, ou alors avec une NotImplementedException
     abstract void lay();
 
     public void setToMove(String toMove) {

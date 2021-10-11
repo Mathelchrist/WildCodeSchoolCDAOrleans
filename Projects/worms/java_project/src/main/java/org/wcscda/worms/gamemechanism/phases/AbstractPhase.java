@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.image.ImageObserver;
 import java.time.Duration;
 import java.time.Instant;
-
 import org.wcscda.worms.Player;
 import org.wcscda.worms.board.AbstractDrawableElement;
 
@@ -14,8 +13,8 @@ public abstract class AbstractPhase extends AbstractDrawableElement {
 
   protected abstract int getMaxDurationSeconds();
 
-  protected AbstractPhase(Player activePlayer) {
-    this.activePlayer = activePlayer;
+  protected AbstractPhase() {
+    super(true);
     phaseStart = Instant.now();
   }
 
@@ -29,9 +28,5 @@ public abstract class AbstractPhase extends AbstractDrawableElement {
   @Override
   protected void drawMain(Graphics2D g, ImageObserver io) {
     // By default do nothing, let's the other do something if needed
-  }
-
-  public Player getActivePlayer() {
-    return activePlayer;
   }
 }

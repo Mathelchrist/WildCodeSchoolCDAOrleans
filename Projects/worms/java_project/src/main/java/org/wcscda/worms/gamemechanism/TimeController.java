@@ -6,29 +6,53 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import javax.swing.Timer;
-
 import org.wcscda.worms.Config;
 import org.wcscda.worms.Player;
-import org.wcscda.worms.board.Worm;
+import org.wcscda.worms.Worm;
 import org.wcscda.worms.gamemechanism.phases.AbstractPhase;
 import org.wcscda.worms.gamemechanism.phases.WormMovingPhase;
+import org.wcscda.worms.gamemechanism.playerrecorder.KeyboardControllerPlayer;
+import org.wcscda.worms.gamemechanism.playerrecorder.KeyboardControllerRecorder;
 
 public class TimeController implements ActionListener {
   private static TimeController instance;
+
+  public KeyboardController getKeyboardController() {
+    return keyboardController;
+  }
+
+  private final KeyboardController keyboardController;
   private PhysicalController board;
   private Timer timer;
   private ArrayList<Player> players = new ArrayList<Player>();
   private int activePlayerIndex = 0;
   private AbstractPhase currentPhase;
   private int phaseCount = 0;
+  private boolean delayedSetNextWorm;
+  private ScriptPlayer scriptPlayer;
+
+  public ScriptPlayer getScriptPlayer() {
+    return scriptPlayer;
+  }
 
   public TimeController() {
+    instance = this;
     initGame();
-
-    board.addKeyListener(new KeyboardController());
+    keyboardController = createController();
+    board.addKeyListener(keyboardController);
 
     timer = new Timer(Config.getClockDelay(), this);
     timer.start();
+  }
+
+  private KeyboardController createController() {
+    if (Config.getRecordGame()) {
+      return new KeyboardControllerRecorder(this.board);
+    } else if (Config.getPlayRecord()) {
+      return new KeyboardControllerPlayer();
+    } else {
+      return new KeyboardController();
+    }
   }
 
   private void initGame() {
@@ -42,14 +66,40 @@ public class TimeController implements ActionListener {
       board.wormInitialPlacement(worm);
     }
 
-    setNextWorm();
+    /*if(Config.getScriptFilename() != null) {
+      scriptPlayer = new ScriptPlayer(Config.getScriptFilename());
+    }*/
+
+    doSetNextWorm();
   }
 
   public void setNextWorm() {
-    activePlayerIndex += 1;
-    activePlayerIndex %= players.size();
+    delayedSetNextWorm = true;
+  }
 
-    AbstractPhase phase = new WormMovingPhase(getActivePlayer().getNextWorm());
+  protected void delayedActions() {
+    if (delayedSetNextWorm) {
+      delayedSetNextWorm = false;
+      doSetNextWorm();
+    }
+  }
+
+  protected void doSetNextWorm() {
+    for (int i = 0; i < players.size(); ++i) {
+      activePlayerIndex += 1;
+      activePlayerIndex %= players.size();
+      if (getActivePlayer().hasWorms()) break;
+    }
+
+    // No player have any worm, it is sad ...
+    if (!getActivePlayer().hasWorms()) {
+      return;
+    }
+
+    getActivePlayer().setNextWorm();
+    getActivePlayer().initWeapon();
+
+    AbstractPhase phase = new WormMovingPhase();
     this.setCurrentPhase(phase);
   }
 
@@ -67,11 +117,7 @@ public class TimeController implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     phaseCount++;
-    boolean inGame = board.actionPerformed(e);
-
-    if (!inGame) {
-      timer.stop();
-    }
+    board.actionPerformed(e);
   }
 
   public static TimeController getInstance() {
@@ -86,6 +132,9 @@ public class TimeController implements ActionListener {
   }
 
   public void setCurrentPhase(AbstractPhase currentPhase) {
+    if ((this.currentPhase != null) && this.currentPhase != currentPhase) {
+      this.currentPhase.removeSelf();
+    }
     this.currentPhase = currentPhase;
   }
 

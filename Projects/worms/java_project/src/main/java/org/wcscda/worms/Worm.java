@@ -1,34 +1,30 @@
-package org.wcscda.worms.board;
+package org.wcscda.worms;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.awt.image.ImageObserver;
 import javax.swing.ImageIcon;
-
-import org.wcscda.worms.Player;
-import org.wcscda.worms.RandomGenerator;
+import org.wcscda.worms.board.ARBEWithGravity;
+import org.wcscda.worms.board.AbstractBoardElement;
+import org.wcscda.worms.board.IMovableVisitor;
+import org.wcscda.worms.board.IVisitable;
 import org.wcscda.worms.gamemechanism.Board;
 
-public class Worm extends ARBEWithGravity {
+public class Worm extends ARBEWithGravity implements IVisitable {
   private static final String leftFacingResource = "src/resources/WormLF.png";
   private static final String rightFacingResource = "src/resources/WormRF.png";
 
-  private static final int imageWidth = 54;
   private static final int imageHeight = 60;
+  private static final int imageWidth = 54;
   private static final int rectPadding = 15;
-
-  private static final int outerMargin = 3;
 
   private static Image wormLF = null;
   private static Image wormRF = null;
-
-  // The position of the worm
-  private final Player player;
-  private final String name;
-
+  private int shownLife = 100;
   private int life = 100;
-
+  private final String name;
+  private final Player player;
   private boolean isUserMoving;
 
   private static void initImages() {
@@ -38,11 +34,13 @@ public class Worm extends ARBEWithGravity {
         new ImageIcon(rightFacingResource).getImage().getScaledInstance(imageWidth, imageHeight, 0);
   }
 
-  public Worm(Player player, String name) {
+  // NRO 2021-09-28 : Player is the Worm factory
+  protected Worm(Player player, String name) {
     this(player, name, getRandomStartingX(), getRandomStartingY());
   }
 
-  public Worm(Player player, String name, int x, int y) {
+  // Idem
+  protected Worm(Player player, String name, int x, int y) {
     super(x, y, imageWidth - 2 * rectPadding, imageHeight - 2 * rectPadding);
 
     this.player = player;
@@ -50,11 +48,11 @@ public class Worm extends ARBEWithGravity {
   }
 
   private static int getRandomStartingX() {
-    return RandomGenerator.getInstance().nextInt(Board.getB_WIDTH() - imageWidth);
+    return RandomGenerator.getInstance().nextInt(Board.getBWIDTH() - imageWidth);
   }
 
   private static int getRandomStartingY() {
-    return RandomGenerator.getInstance().nextInt(Board.getB_HEIGHT() - imageHeight);
+    return RandomGenerator.getInstance().nextInt(Board.getBHEIGHT() - imageHeight);
   }
 
   @Override
@@ -66,7 +64,18 @@ public class Worm extends ARBEWithGravity {
 
     // Drawing the life
     g.setColor(player.getColor());
-    g.drawString("" + life, (int) getX(), (int) getY() - 15);
+    g.drawString("" + getShownLife(), (int) getX(), (int) getY() - 15);
+  }
+
+  private int getShownLife() {
+
+    if (life < shownLife) {
+      shownLife--;
+    } else if (life > shownLife) {
+      shownLife++;
+    }
+
+    return this.shownLife;
   }
 
   private boolean isRightFacing() {
@@ -86,7 +95,7 @@ public class Worm extends ARBEWithGravity {
   }
 
   @Override
-  public void colideWith(AbstractBoardElement movable, Point2D prevPosition) {
+  public void collideWith(AbstractBoardElement movable, Point2D prevPosition) {
     setPosition(prevPosition);
   }
 
@@ -108,7 +117,20 @@ public class Worm extends ARBEWithGravity {
   }
 
   public void die() {
-    player.getWorms().remove(this);
     removeSelf();
+  }
+
+  @Override
+  protected void onRemoval() {
+    player.getWorms().remove(this);
+  }
+
+  @Override
+  public void accept(Point2D prevPosition, IMovableVisitor visitor) {
+    visitor.visit(this, prevPosition);
+  }
+
+  public int getLife() {
+    return life;
   }
 }

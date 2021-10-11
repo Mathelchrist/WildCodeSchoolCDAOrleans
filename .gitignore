@@ -1,3 +1,9 @@
 .ipynb_checkpoints
 *.class
 *.jar
+.project
+.idea
+.classpath
+.settings
+target
+.DS_Store

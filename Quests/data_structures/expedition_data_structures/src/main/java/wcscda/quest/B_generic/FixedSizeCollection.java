@@ -12,6 +12,13 @@ public class FixedSizeCollection<T> implements Collection<T> {
     private T[] array;
     private int currentSize;
 
+
+
+
+    // se réferé au lexercice A pour comprendre les methodes j'ai juste fait en sorte que les methodes fonctionne
+    // avec des class générique.
+
+
     public FixedSizeCollection(Class<T> clazz, int maxSize) {
         this.maxSize = maxSize;
         array = (T[])Array.newInstance(clazz, maxSize);

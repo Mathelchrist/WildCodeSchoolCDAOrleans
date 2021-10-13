@@ -12,6 +12,13 @@ public class FixedSizeCollection<T> implements Collection<T> {
     private T[] array;
     private int currentSize;
 
+
+
+
+    // se réferé au lexercice A pour comprendre les methodes j'ai juste fait en sorte que les methodes fonctionne
+    // avec des class générique.
+
+
     public FixedSizeCollection(Class<T> clazz, int maxSize) {
         this.maxSize = maxSize;
         array = (T[])Array.newInstance(clazz, maxSize);
@@ -20,18 +27,27 @@ public class FixedSizeCollection<T> implements Collection<T> {
 
     @Override
     public int size() {
-        return 0;
-    }
+        int value = 0;
+        for (int i = 0; i < array.length; i++)
+            if (array[i] == null) {
+                value = value + 1;
+            }
+        return array.length - value;    }
 
     @Override
     public boolean isEmpty() {
-        return false;
-    }
+        while (size() > 0) {
+            return false;
+        }
+        return true;    }
 
     @Override
     public boolean contains(Object o) {
-        return false;
-    }
+        for (int i = 0 ; i<array.length ; i++)
+            if (o == array[i]){
+                return true;
+            }
+        return false;    }
 
     @Override
     public Iterator<T> iterator() {
@@ -40,7 +56,7 @@ public class FixedSizeCollection<T> implements Collection<T> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return array;
     }
 
     @Override
@@ -50,11 +66,30 @@ public class FixedSizeCollection<T> implements Collection<T> {
 
     @Override
     public boolean add(T t) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == null) {
+                array[i] = t;
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public boolean remove(Object o) {
+        for (int i = 0 ; i < array.length; i++){
+            if (o == array[i]){
+                while (i < array.length-1){
+                    array[i] = array[i+1]    ;
+
+                    i++;
+                }
+                array[i] = null;
+                return true;
+            }
+        }
+
+
         return false;
     }
 

@@ -10,26 +10,35 @@ public class ArmyArrayList implements UltronArmy {
 
     @Override
     public boolean add(Sentinel sentinel) {
-        return false;
+        sentinelArrayList.add(sentinel);
+        return true;
     }
 
     @Override
     public int size() {
-        return 0;
+        return sentinelArrayList.size();
     }
 
     @Override
     public Sentinel[] getPatrol(int patrolSize) {
-        return new Sentinel[0];
+        for (int i = 0 ; i < patrolSize ;  i++){
+            sentinelArrayList.remove(i);
+        }
+        return new Sentinel[patrolSize];
     }
 
     @Override
     public void patrolReturn(Sentinel[] sentinels) {
 
+        for (Sentinel sentiel :sentinels){
+            sentinelArrayList.add(sentiel);
+        }
+
+
     }
 
     @Override
     public boolean contains(Sentinel sentinel) {
-        return false;
+        return sentinelArrayList.contains(sentinel);
     }
 }

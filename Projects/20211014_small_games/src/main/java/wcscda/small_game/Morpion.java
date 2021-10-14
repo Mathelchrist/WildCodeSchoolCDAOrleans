@@ -5,53 +5,53 @@ import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 
 public class Morpion extends Drawable implements SmallGameInterface {
-    @Override
-    public void draw(Graphics2D g, ImageObserver io) {
+	private static boolean clik = false;
+	@Override
+	public void draw(Graphics2D g, ImageObserver io) {
 
-        drawGrid(g, io);
+		drawGrid(g, io);
+		drawClick(g, io);
 
-        g.setFont(new Font("Roboto", Font.BOLD, 50));
+	}
+	public static void drawClick(Graphics2D g, ImageObserver io ){
 
-        drawClick(g, io);
+		ArrayList position = MouseController.getSavePosXY();
+		for(int i = 0 ;  i < position.size() ; i++){
+			int x = (int) position.get(i);
+			int y = (int) position.get(i+1);
+			//      MouseController.clickForm( g,  x, y);
+			g.setColor(Color.WHITE);
+			System.out.println(x+ " "+y);
+			if (position.size() == 2) {
+				g.drawLine(x - 30, y - 30, x + 30, y + 30);
+				g.drawLine(x + 30, y - 30, x - 30, y + 30);
+				clik = true;
+			} else {
+				g.drawOval(x - 50, y - 50, 100, 100);
+				clik = false;
+			}
+			i++;
+		}
+	}
 
+	private void drawGrid(Graphics2D g, ImageObserver io) {
+		int x1 = 400;
+		int y1 = 0;
+		int x2 = 400;
+		int y2 = 800;
+		for(int i=0;i<4;i++) {
+			g.drawLine(x1, y1, x2, y2);
+			x2 += 400;
+			x1 = x2;
 
+			if (x2 >= 1200) {
+				x1 = 0;
+				y1+=266;
+				y2 = y1;
+			}
+		}
 
-    }
-    public static void drawClick(Graphics2D g, ImageObserver io ){
-
-        ArrayList position = MouseController.getSavePosXY();
-        for(int i = 0 ;  i < position.size() ; i++){
-            int x = position.indexOf(i);
-            int y = position.indexOf(i+1);
-      //      MouseController.clickForm( g,  x, y);
-
-
-            i++;
-        }
-    }
-
-    private void drawGrid(Graphics2D g, ImageObserver io) {
-        int verticalLoops = 2;
-        int horizontaleLoops = 2;
-        int x1 = 0;
-        int x2 = 0;
-        int y1 = 0;
-        int y2 = 0;
-        // utilisation de la methode g.drawLine pour faire les différentes lignes du jeux du morpions
-        // celle-ci comporte 2 boucles une boucle verticale et une autre horizontale et j'incremente les différentes valeurs
-        // a chaque tour de boucle
-
-        for (int i = 0; i < verticalLoops; i++) {
-            g.drawLine(x1 += 400, y1 = y1, x2 += 400, y2 += 800);
-        }
-        x1 = 0;
-        x2 = 0;
-        y1 = 0;
-        y2 = 0;
-
-        for (int j = 0; j < horizontaleLoops; j++) {
-            g.drawLine(x1, y1 += 266, x2 = 1200, y2 += 266);
-
-        }
-    }
+		g.setFont(new Font("Roboto", Font.BOLD, 50));
+		g.drawString("TicTacToe", 50, 50);
+	}
 }

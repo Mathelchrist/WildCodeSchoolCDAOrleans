@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class MouseController extends MouseAdapter {
     private final Board board;
-    private  static boolean clik = false;
+    private static boolean clik = false;
     private static ArrayList<Integer> savePosXY = new ArrayList<Integer>();
 
     public MouseController(Board board) {

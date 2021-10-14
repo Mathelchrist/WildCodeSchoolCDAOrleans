@@ -23,7 +23,7 @@ public class Morpion extends Drawable implements SmallGameInterface {
         for(int i = 0 ;  i < position.size() ; i++){
             int x = position.indexOf(i);
             int y = position.indexOf(i+1);
-            MouseController.clickForm( g,  x, y);
+      //      MouseController.clickForm( g,  x, y);
 
 
             i++;

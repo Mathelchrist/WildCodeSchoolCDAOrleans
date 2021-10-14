@@ -15,23 +15,23 @@ public class Morpion extends Drawable implements SmallGameInterface {
 	}
 	public static void drawClick(Graphics2D g, ImageObserver io ){
 
-		ArrayList position = MouseController.getSavePosXY();
-		for(int i = 0 ;  i < position.size() ; i++){
-			int x = (int) position.get(i);
-			int y = (int) position.get(i+1);
-			//      MouseController.clickForm( g,  x, y);
-			g.setColor(Color.WHITE);
-			System.out.println(x+ " "+y);
-			if (position.size() == 2) {
-				g.drawLine(x - 30, y - 30, x + 30, y + 30);
-				g.drawLine(x + 30, y - 30, x - 30, y + 30);
-				clik = true;
-			} else {
-				g.drawOval(x - 50, y - 50, 100, 100);
-				clik = false;
-			}
-			i++;
-		}
+//		ArrayList position = MouseController.getSavePosXY();
+//		for(int i = 0 ;  i < position.size() ; i++){
+//			int x = (int) position.get(i);
+//			int y = (int) position.get(i+1);
+//			//      MouseController.clickForm( g,  x, y);
+//			g.setColor(Color.WHITE);
+//			System.out.println(x+ " "+y);
+//			if (position.size() == 2) {
+//				g.drawLine(x - 30, y - 30, x + 30, y + 30);
+//				g.drawLine(x + 30, y - 30, x - 30, y + 30);
+//				clik = true;
+//			} else {
+//				g.drawOval(x - 50, y - 50, 100, 100);
+//				clik = false;
+//			}
+//			i++;
+//		}
 	}
 
 	private void drawGrid(Graphics2D g, ImageObserver io) {

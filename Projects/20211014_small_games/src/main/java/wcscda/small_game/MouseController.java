@@ -10,7 +10,8 @@ import java.util.ArrayList;
 
 public class MouseController extends MouseAdapter {
     private final Board board;
-    private static boolean clik = false;
+    private static boolean click = true;
+    private static String[] tictactoe = new String[9];
     private static ArrayList<Integer> savePosXY = new ArrayList<Integer>();
 
     public MouseController(Board board) {
@@ -26,7 +27,6 @@ public class MouseController extends MouseAdapter {
                 int y = mouseEvent.getY();
                 g.setColor(Color.WHITE);
                 clickForm(g, x, y);
-                System.out.println(savePosXY.toString());
             }
         });
     }
@@ -40,23 +40,49 @@ public class MouseController extends MouseAdapter {
     }
 
     public static void clickForm(Graphics2D g, int x, int y) {
-        if (clik == false) {
+        if (click) {
             g.drawLine(x - 30, y - 30, x + 30, y + 30);
             g.drawLine(x + 30, y - 30, x - 30, y + 30);
-            clik = true;
+            click = false;
+            
             savePosXY.add(x);
             savePosXY.add(y);
         } else {
             g.drawOval(x - 50, y - 50, 100, 100);
-            clik = false;
+            click = true;
             savePosXY.add(x);
             savePosXY.add(y);
         }
     }
 
-
-
     public void mousePressed(MouseEvent mouseEvent) {
-
+    	if(mouseEvent.getX() < 400 && mouseEvent.getY() < 266) {
+    		System.out.println("LOL1");
+    		System.out.println(click);
+    	}else if(mouseEvent.getX() > 400 && mouseEvent.getX() < 800 && mouseEvent.getY() < 266) {
+    		System.out.println("LOL2");
+    		System.out.println(click);
+    	}else if(mouseEvent.getX() > 800 && mouseEvent.getY() < 266) {
+    		System.out.println("LOL3");
+    		System.out.println(click);
+    	}else if(mouseEvent.getX() < 400 && mouseEvent.getY() > 266 && mouseEvent.getY() < 532) {
+    		System.out.println("LOL4");
+    		System.out.println(click);
+    	}else if(mouseEvent.getX() > 400 && mouseEvent.getX() < 800 && mouseEvent.getY() > 266 && mouseEvent.getY() < 532) {
+    		System.out.println("LOL5");
+    		System.out.println(click);
+    	}else if(mouseEvent.getX() > 800 && mouseEvent.getY() > 266 && mouseEvent.getY() < 532) {
+    		System.out.println("LOL6");
+    		System.out.println(click);
+    	}else if(mouseEvent.getX() < 400 && mouseEvent.getY() > 532) {
+    		System.out.println("LOL7");
+    		System.out.println(click);
+    	}else if(mouseEvent.getX() > 400 && mouseEvent.getX() < 800 && mouseEvent.getY() > 532) {
+    		System.out.println("LOL8");
+    		System.out.println(click);
+    	}else if(mouseEvent.getX() > 800 && mouseEvent.getY() > 532) {
+    		System.out.println("LOL9");
+    		System.out.println(click);
+    	}
     }
 }
